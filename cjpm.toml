@@ -1,0 +1,10 @@
+[package]
+cjc-version = "1.0.5"
+name = "url_parse"
+description = "Cangjie URL parsing with url-parse and DefinitelyTyped API compatibility"
+version = "1.5.10"
+output-type = "static"
+target-dir = "target"
+
+[dependencies]
+requires_port = { path = "../requires-port4cj" }

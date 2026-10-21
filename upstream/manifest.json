@@ -1,0 +1,34 @@
+{
+  "captured": "2026-10-21",
+  "url_parse": {
+    "repository": "https://github.com/unshiftio/url-parse",
+    "version": "1.5.10",
+    "commit": "877225add9c3a2e33ef20ebef94dd397a0965666",
+    "path": "url-parse"
+  },
+  "querystringify": {
+    "repository": "https://github.com/unshiftio/querystringify",
+    "version": "2.2.0",
+    "commit": "60d8dd92aeb5550fb79b93e6dae193d02e029daf",
+    "path": "querystringify"
+  },
+  "requires_port": {
+    "repository": "https://github.com/unshiftio/requires-port",
+    "version": "1.0.0",
+    "commit": "07e8e8298f892243734d695e884a78a56e3dccb9",
+    "path": "requires-port"
+  },
+  "types": {
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "source_path": "types/url-parse",
+    "last_path_commit": "05766ab10a4987e93fdee7627f9fe9e7bc6d1a65",
+    "path": "types/url-parse",
+    "hash_encoding": "UTF-8 text normalized to LF",
+    "sha256": {
+      "index.d.ts": "efc36f5723fa2828a7f4bddde48da2c8bdcf30033ec580b9b9e9ad35ad202b14",
+      "package.json": "23668eb7a6a33ebe6cd2aa66bdc0f97ca2f12032fd693eb9b29c494c04aa8ba6",
+      "tsconfig.json": "c2a95948fb3caac7f7b2c7e8fc07eef0337f655d72c3ca936017b55c065000e1",
+      "url-parse-tests.ts": "390934e137780bc3bfd9bb80ca2d0f3f43b9c0bb269f82dad860aceac977d4c2"
+    }
+  }
+}
