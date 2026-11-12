@@ -21,7 +21,7 @@ class UrlState {
     var slashes = false
     var username = ""
     var queryData: Any = Query.raw("")
-    var queryStringify: () -> String = {=> ""}
+    var queryStringify: (?(() -> String)) -> String = {_ => ""}
 
     init(address: String, base: Location) {
         let extracted = extractProtocol(address, base)
@@ -106,19 +106,32 @@ class UrlState {
             host = hostname
             port = ""
         }
-        if (auth != "") {
-            setAuth(auth)
-        }
-        refreshAuthOrigin()
     }
 
     func setAuth(value: String): Unit {
         let index = find(value, r':')
         if (index >= 0) {
-            username = normalizeAuth(slice(value, 0, index))
-            password = normalizeAuth(slice(value, index + 1, size(value)))
+            // Each raw field is observable if decoding that field throws.
+            username = slice(value, 0, index)
+            username = normalizeAuth(username)
+            password = slice(value, index + 1, size(value))
+            password = normalizeAuth(password)
         } else {
             username = normalizeAuth(value)
+        }
+    }
+
+    func replaceQuery<T>(value: T, stringify: ?StringifyQuery<T>): Unit {
+        queryData = value
+        queryStringify = {
+            custom =>
+                if (let Some(typed) <- stringify) {
+                    if (let Some(render) <- custom) {
+                        return render()
+                    }
+                    return typed(value)
+                }
+                return defaultStringify(value, custom)
         }
     }
 
@@ -234,44 +247,33 @@ class UrlState {
 /** A typed URL result, including a custom query parser and serializer. */
 public open class URLParse<T> <: ToString {
     private let state: UrlState
-    private let stringify: (T) -> String
+    private let stringify: ?StringifyQuery<T>
 
     public init(address: String, parser: (String) -> T, stringify: (T) -> String, base!: Location = Location()) {
-        state = UrlState(address, location(base))
-        this.stringify = stringify
-        let value = parser(state.rawQuery)
-        state.queryData = value
-        state.queryStringify = {=> stringify(value)}
-        state.href = state.render(stringify(value))
+        this(address, parser, base, Some(stringify))
     }
 
     protected init(address: String, base: Location, parser: (String) -> T, stringify: (T) -> String) {
-        state = UrlState(address, location(base))
-        this.stringify = stringify
-        let value = parser(state.rawQuery)
-        state.queryData = value
-        state.queryStringify = {=> stringify(value)}
-        state.href = state.render(stringify(value))
+        this(address, parser, base, Some(stringify))
     }
 
     public init(address: String, parser: (String) -> T, base!: Location = Location()) {
-        state = UrlState(address, location(base))
-        let render = defaultStringify<T>
-        this.stringify = render
-        let value = parser(state.rawQuery)
-        state.queryData = value
-        state.queryStringify = {=> render(value)}
-        state.href = state.render(render(value))
+        this(address, parser, base, None)
     }
 
-    private init(state: UrlState, stringify: (T) -> String) {
+    private init(address: String, parser: (String) -> T, base: Location, stringify: ?StringifyQuery<T>) {
+        this(UrlState(address, location(base)), stringify)
+        state.replaceQuery(parser(state.rawQuery), stringify)
+        if (state.auth != "") {
+            state.setAuth(state.auth)
+        }
+        state.refreshAuthOrigin()
+        state.href = state.render(state.queryStringify(None))
+    }
+
+    private init(state: UrlState, stringify: ?StringifyQuery<T>) {
         this.state = state
         this.stringify = stringify
-    }
-
-    private func replaceQuery(value: T): Unit {
-        state.queryData = value
-        state.queryStringify = {=> stringify(value)}
     }
 
     private func readQuery(): T {
@@ -378,7 +380,7 @@ public open class URLParse<T> <: ToString {
             return readQuery()
         }
         set(value) {
-            replaceQuery(value)
+            state.replaceQuery(value, stringify)
         }
     }
     public mut prop slashes: Bool {
@@ -406,9 +408,7 @@ public open class URLParse<T> <: ToString {
             if (flag && value != "") {
                 throw IllegalArgumentException("Query parser must be a function")
             }
-            let query = querySetter(value)
-            state.queryData = query
-            state.queryStringify = {=> query.toString()}
+            state.replaceQuery(querySetter(value), None)
         } else {
             state.change(part, value, flag)
         }
@@ -430,7 +430,7 @@ public open class URLParse<T> <: ToString {
     }
 
     public func setQuery(value: T): URLParse<T> {
-        replaceQuery(value)
+        state.replaceQuery(value, stringify)
         state.refreshAuthOrigin()
         state.href = toString()
         return this
@@ -447,7 +447,7 @@ public open class URLParse<T> <: ToString {
     }
 
     public func set<U>(part: String, value: String, parser: (String) -> U): URLParse<U> {
-        let result = URLParse<U>(state, defaultStringify<U>)
+        let result = URLParse<U>(state, None)
         if (part == "query" && value != "") {
             result.setQuery(parser(value))
         } else {
@@ -457,7 +457,7 @@ public open class URLParse<T> <: ToString {
     }
 
     public func toString(): String {
-        return state.render(state.queryStringify())
+        return state.render(state.queryStringify(None))
     }
     public func toString(stringify: (T) -> String): String {
         if (let Some(text) <- (state.queryData as String)) {
@@ -468,7 +468,7 @@ public open class URLParse<T> <: ToString {
                 return state.render(value.rawText)
             }
         }
-        return state.render(stringify(query))
+        return state.render(state.queryStringify(Some({=> stringify(query)})))
     }
     public func asLocation(): Location {
         return state.asLocation()
@@ -590,7 +590,7 @@ public func parse<T>(address: String, base: URLParse<T>, parseQuery!: Bool = fal
 }
 
 public func parse<T>(address: String, parser: (String) -> T, base!: Location = Location()): URLParse<T> {
-    return URLParse<T>(address, parser, defaultStringify<T>, base: base)
+    return URLParse<T>(address, parser, base: base)
 }
 
 public func parse<T>(address: String, base: String, parser: (String) -> T): URLParse<T> {
@@ -601,10 +601,37 @@ public func parse<T>(address: String, base: Location, parser: (String) -> T): UR
     return parse(address, parser, base: base)
 }
 
-func defaultStringify<T>(value: T): String {
-    if (let Some(text) <- (value as String)) {
-        return text
+func defaultStringify<T>(value: T, custom: ?(() -> String)): String {
+    // Upstream only calls a serializer for objects. A truthy number or boolean reaches query.charAt(0).
+    let truthy = match (value) {
+        case text: String => return text
+        case flag: Bool => flag
+        case n: Int8 => n != 0
+        case n: Int16 => n != 0
+        case n: Int32 => n != 0
+        case n: Int64 => n != 0
+        case n: IntNative => n != 0
+        case n: UInt8 => n != 0
+        case n: UInt16 => n != 0
+        case n: UInt32 => n != 0
+        case n: UInt64 => n != 0
+        case n: UIntNative => n != 0
+        case n: Float16 => n != 0.0 && !n.isNaN()
+        case n: Float32 => n != 0.0 && !n.isNaN()
+        case n: Float64 => n != 0.0 && !n.isNaN()
+        case _ =>
+            if (let Some(render) <- custom) {
+                return render()
+            }
+            return stringifyQueryObject(value)
     }
+    if (truthy) {
+        throw IllegalArgumentException("query.charAt is not a function")
+    }
+    return ""
+}
+
+private func stringifyQueryObject<T>(value: T): String {
     if (let Some(query) <- (value as Query)) {
         return query.toString()
     }

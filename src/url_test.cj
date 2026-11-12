@@ -29,6 +29,14 @@ class UrlParseTest {
     }
 
     @TestCase
+    func locationInfersSlashesForCommaInScheme(): Unit {
+        let base = Location(protocol: "a,b:", hostname: "host", host: "host", pathname: "/a/b",
+            href: "a,b://host/a/b")
+        @Expect(Url.location(base).slashes, Some(true))
+        @Expect(parse("../child", base).href, "a,b://host/child")
+    }
+
+    @TestCase
     func setFields(): Unit {
         let url = parse("http://example.com/", true)
         let result = url.set("hostname", "OTHER.com").set("port", 8080).set("pathname", "a").set("hash", "b")
@@ -51,6 +59,42 @@ class UrlParseTest {
         @Expect(url.username, "a%40b")
         url.set("auth", "a%40b:c:d")
         @Expect(url.password, "c%3Ad")
+    }
+
+    @TestCase
+    func invalidAuthPasswordPreservesUpstreamStateAfterError(): Unit {
+        let url = parse("https://old:secret@example.com/")
+        var threw = false
+        try {
+            url.set("auth", "new:%ZZ")
+        } catch (_: IllegalArgumentException) {
+            threw = true
+        }
+
+        @Expect(threw, true)
+        // Upstream assigns the raw password before decoding. The exception skips the href/auth refresh.
+        @Expect(url.username, "new")
+        @Expect(url.password, "%ZZ")
+        @Expect(url.auth, "old:secret")
+        @Expect(url.href, "https://old:secret@example.com/")
+        @Expect(url.toString(), "https://new:%ZZ@example.com/")
+    }
+
+    @TestCase
+    func invalidAuthUsernameAffectsNextUpdate(): Unit {
+        let url = parse("https://old:secret@host/")
+        var threw = false
+        try {
+            url.set("auth", "%ZZ:p")
+        } catch (_: IllegalArgumentException) {
+            threw = true
+        }
+        @Expect(threw, true)
+        @Expect(url.username, "%ZZ")
+        @Expect(url.password, "secret")
+        @Expect(url.auth, "old:secret")
+        url.set("hash", "next")
+        @Expect(url.href, "https://%ZZ:secret@host/#next")
     }
 
     @TestCase
@@ -87,6 +131,36 @@ class UrlParseTest {
     }
 
     @TestCase
+    func editingQueryUpdatesRenderingBeforeHref(): Unit {
+        let url = parse("https://example.com/?page=1", true)
+        url.query.set("page", "2")
+
+        @Expect(url.toString(), "https://example.com/?page=2")
+        @Expect(url.href, "https://example.com/?page=1")
+
+        url.set("hash", "next")
+        @Expect(url.href, "https://example.com/?page=2#next")
+        @Expect(url.toString(), url.href)
+    }
+
+    @TestCase
+    func constructorCallsQueryParserBeforeInvalidAuthThrows(): Unit {
+        let calls = ArrayList<String>()
+        var threw = false
+        try {
+            parse("https://u:%ZZ@host/?x=1", {text: String =>
+                calls.add(text)
+                Query()
+            })
+        } catch (_: IllegalArgumentException) {
+            threw = true
+        }
+        @Expect(threw, true)
+        @Expect(calls.size, 1)
+        @Expect(calls.contains("?x=1"), true)
+    }
+
+    @TestCase
     func customParser(): Unit {
         let custom = parse("http://example.com/?x=1", {_: String => "1337"})
         @Expect(custom.query, "1337")
@@ -105,6 +179,36 @@ class UrlParseTest {
         @Expect(original.toString(), changed.toString())
         changed.set("hostname", "other.com")
         @Expect(original.host, "other.com")
+    }
+
+    @TestCase
+    func numericQueryParserRejectsNonzeroValueWithoutSerializer(): Unit {
+        var threw = false
+        try {
+            parse("https://host/", {_: String => 42i64})
+        } catch (_: Exception) {
+            threw = true
+        }
+        @Expect(threw, true)
+    }
+
+    @TestCase
+    func falseQueryIgnoresCustomSerializer(): Unit {
+        let url = parse("https://host/", {_: String => false})
+        @Expect(url.href, "https://host/")
+        @Expect(url.toString({_: Bool => "override"}), "https://host/")
+    }
+
+    @TestCase
+    func setQueryKeepsTypedSerializer(): Unit {
+        let url = parse("https://example.com/", {_: String => 1i64},
+            {page: Int64 => "page=" + page.toString()})
+        @Expect(url.href, "https://example.com/?page=1")
+        url.setQuery(3)
+
+        @Expect(url.query, 3)
+        @Expect(url.href, "https://example.com/?page=3")
+        @Expect(url.toString(), "https://example.com/?page=3")
     }
 
     @TestCase
