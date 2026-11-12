@@ -101,8 +101,9 @@ func hasSchemeSlashes(address: String): Bool {
         return false
     }
     var i = 1
-    while (i < runes.size && (asciiAlpha(runes[i]) || (runes[i] >= r'0' && runes[i] <= r'9') || runes[i] == r'+' ||
-            runes[i] == r'-' || runes[i] == r'.')) {
+    // The upstream slashes regexp uses the range +-. which also includes comma.
+    while (i < runes.size && (asciiAlpha(runes[i]) || (runes[i] >= r'0' && runes[i] <= r'9') || (runes[i] >= r'+' &&
+            runes[i] <= r'.'))) {
         i++
     }
     return i + 2 < runes.size && runes[i] == r':' && runes[i + 1] == r'/' && runes[i + 2] == r'/'
