@@ -33,12 +33,29 @@ url-parse4cj/
 ## 环境与依赖
 
 - 最低仓颉 SDK **1.0.5**，加载 SDK 环境后使用 `cjc`、`cjpm`。
-- 验证环境：Windows x86_64、Cangjie 1.0.5 和 1.2.1。
+- 验证平台：Windows x86_64、Linux x86_64（Ubuntu 26.04.1 / WSL2）。
 - 上游行为对照脚本使用 Node.js。
 
-2026-11-14 使用 SDK 1.2.1、Node.js 22.20.0，清理构建缓存后执行现有 release 流程：
-`cjpm build`、`cjpm test`（17/17）、迁移示例及上游对照（101 个测试体、5,240 次比较）
-均通过，行为差异为 0。清单中的 `cjc-version = "1.0.5"` 继续作为最低 SDK 要求。
+2026-11-14 使用各 SDK 的独立构建目录及 Node.js 22.20.0，完成以下版本回归：
+
+| 仓颉 SDK | Windows x86_64 | Linux x86_64 / WSL2 |
+| --- | --- | --- |
+| 1.0.5 | 通过 | 通过 |
+| 1.1.0 | 通过 | 通过 |
+| 1.1.3 | 通过 | 通过 |
+| 1.1.5 | 通过 | 通过 |
+| 1.2.0 | 通过 | 通过 |
+| 1.2.1 | 通过 | 通过 |
+
+每个环境均通过 release/debug 静态库及依赖构建、原有 **17/17 单元测试**、
+`examples/migration` 及同时引入两库的消费端验证；单测无失败、错误或跳过。
+release 模式的上游对照使用脚本原有固定种子 `20261021`，每个环境执行
+**101 个上游测试体、5,240 次行为比较，零差异**。debug 模式未运行上游差分。
+
+验证对应本仓源码基线 `8181a1589158bbe8a8a45e12c5acf6f324deaf93`，
+`requires-port4cj` 依赖基线为 `5f3cf14a7a4e440e2e5b2009c2059eefb182a067`。
+清单中的 `cjc-version = "1.0.5"` 继续作为最低 SDK 要求；结论限于表中平台从源码
+重新构建后的兼容性，未验证跨 SDK 二进制混用。
 
 两个仓库放在同一级目录：
 
@@ -52,11 +69,15 @@ cj/
 
 ## 编译与验证
 
-在根目录执行：
+加载待测 SDK 环境后，在根目录执行。切换 SDK 时还需清理兄弟目录 `requires-port4cj`、
+迁移示例和 `tests/compatibility` 的构建缓存：
 
 ```shell
+cjpm clean
 cjpm build
 cjpm test
+cjpm build -g
+cjpm test -g
 node scripts/check_upstream.cjs
 ```
 
@@ -70,7 +91,9 @@ node scripts/check_upstream.cjs
 
 ```shell
 cd examples/migration
+cjpm clean
 cjpm run
+cjpm run -g
 ```
 
 ## 使用
