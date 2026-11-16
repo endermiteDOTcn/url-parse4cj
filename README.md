@@ -27,7 +27,8 @@ url-parse4cj/
 ├── doc/
 │   ├── feature_api.md              # API 说明
 │   ├── migration.md                # JS/TS 迁移对应表
-│   └── porting.md                  # 上游来源与实现对应关系
+│   ├── porting.md                  # 上游来源与实现对应关系
+│   └── validation.md               # 扩展回归、覆盖率和复现方法
 └── upstream/                       # 运行库、类型定义、测试及许可证快照
 ```
 
@@ -64,6 +65,9 @@ release 上游对照仍为 **101 个测试体、5,240 次比较，零差异**。
 新增用例覆盖构造重载、回调时机、泛型共享状态、查询集合与序列化、字段赋值及联动、
 Unicode、相对路径和异常输入；生产实现与最低 SDK 要求保持不变。
 
+八种子扩展回归、SDK 1.2.1 / Windows 的原生单测行覆盖率与本轮入口校验复验，
+见[兼容性验证报告](doc/validation.md)和[机器结果](doc/validation-results.json)。
+
 两个仓库放在同一级目录：
 
 ```text
@@ -93,6 +97,12 @@ node scripts/check_upstream.cjs
 共完成 **5,240 项行为比较**。比较字段包括 `auth`、`hash`、`host`、`hostname`、
 `href`、`origin`、`password`、`pathname`、`port`、`protocol`、`slashes`、`username`、
 查询数据与 `toString()` 结果。报告写入 `target/compatibility-results.json`。
+
+`UPSTREAM_SEED` 可选择 `0` 到 `4294967295` 的种子，未设置时默认使用 `20261021`。
+只接受非空十进制数字串（允许前导零）；空白、正负号、小数、指数和进制前缀会在编译前被拒绝。
+例如在 PowerShell 中先执行 `$env:UPSTREAM_SEED = "42"`，或在 Linux 中执行
+`UPSTREAM_SEED=42 node scripts/check_upstream.cjs`。报告中的 `seed` 和 `inputSha256`
+分别记录实际种子和传入仓颉程序的 UTF-8 输入摘要；完整八种子复现方法见验证报告。
 
 运行迁移示例：
 

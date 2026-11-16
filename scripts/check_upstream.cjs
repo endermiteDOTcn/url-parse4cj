@@ -5,6 +5,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const { execFileSync, spawnSync } = require('node:child_process');
+const { createHash } = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const qs = require('../upstream/querystringify');
 const required = require('../upstream/requires-port');
@@ -110,7 +111,12 @@ function assume(value) {
   chain = new Proxy(() => chain, { get: (_, key) => actions[key] ? (...args) => { actions[key](...args); return chain; } : chain });
   return chain;
 }
-let randomState = 20261021;
+const seedText = process.env.UPSTREAM_SEED ?? '20261021';
+const initialSeed = Number(seedText);
+if (!/^\d+$/.test(seedText) || !Number.isInteger(initialSeed) || initialSeed < 0 || initialSeed > 0xffffffff) {
+  throw new Error('UPSTREAM_SEED must contain decimal digits for an integer between 0 and 4294967295');
+}
+let randomState = initialSeed;
 function random() { randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0; return randomState / 2 ** 32; }
 const seededMath = Object.create(Math);
 seededMath.random = random;
@@ -275,11 +281,13 @@ const mismatches = cases.flatMap((test, index) => actual[index] === test.expecte
 }]);
 fs.mkdirSync(path.join(root, 'target'), { recursive: true });
 fs.writeFileSync(path.join(root, 'target/compatibility-results.json'), JSON.stringify({
+  seed: initialSeed, inputSha256: createHash('sha256').update(input).digest('hex'),
   upstreamTests, comparisons: cases.length, mismatches,
 }, null, 2), 'utf8');
 if (mismatches.length) {
   console.error(JSON.stringify(mismatches.slice(0, 5), null, 2));
   throw new Error(`${mismatches.length} behavior mismatches; see target/compatibility-results.json`);
 }
+console.log(`Upstream seed: ${initialSeed}`);
 console.log(`Upstream test bodies: ${upstreamTests} passed`);
 console.log(`Behavior comparisons: ${cases.length} passed`);

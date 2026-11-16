@@ -13,7 +13,7 @@ class UrlState {
     var hostname = ""
     var href = ""
     var origin = "null"
-    var password = ""
+    var password = "" // cjlint-ignore !G.OTH.02 Empty storage for the URL password component; no credential is embedded.
     var pathname = ""
     var port = ""
     var protocol = ""

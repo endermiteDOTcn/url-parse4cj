@@ -40,3 +40,11 @@
 
 `scripts/check_upstream.cjs` 的运行产物保存在 `target/`，仓颉对照程序位于 `tests/compatibility/`。
 可运行迁移示例位于 `examples/migration/`。
+
+## SDK 兼容性验证
+
+2026-11-14 已验证 SDK 1.0.5、1.1.0、1.1.3、1.1.5、1.2.0、1.2.1，
+覆盖 Windows x86_64 与 Linux x86_64（Ubuntu / WSL2）的 release/debug 构建、
+原生单测、独立示例和消费端集成。每个环境还完成了 8 个种子的 release 上游对照，零差异。
+完整的版本矩阵、覆盖率、最终改动、复现命令和官方提交前事项见
+[兼容性验证报告](validation.md)与[机器结果](validation-results.json)。
