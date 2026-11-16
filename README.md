@@ -19,7 +19,8 @@ url-parse4cj/
 │   ├── query.cj                    # 原始/对象查询数据、parse 和 stringify
 │   ├── strings.cj                  # URI 编解码及字符串处理
 │   ├── types.cj                    # 查询回调类型别名
-│   └── url_test.cj                 # 仓颉单元测试
+│   ├── url_test.cj                 # 仓颉单元测试
+│   └── public_api_test.cj          # 公开 API 回归测试
 ├── examples/migration/             # JS 调用到仓颉调用的可运行示例
 ├── tests/compatibility/            # 行为对照程序
 ├── scripts/check_upstream.cjs      # 执行上游测试并对照两版结果
@@ -56,6 +57,12 @@ release 模式的上游对照使用脚本原有固定种子 `20261021`，每个�
 `requires-port4cj` 依赖基线为 `5f3cf14a7a4e440e2e5b2009c2059eefb182a067`。
 清单中的 `cjc-version = "1.0.5"` 继续作为最低 SDK 要求；结论限于表中平台从源码
 重新构建后的兼容性，未验证跨 SDK 二进制混用。
+
+2026-11-16 加入 `src/public_api_test.cj` 的 9 个公开 API 回归用例后，在上表 12 个环境
+重新验证：release/debug 构建、**26/26 单元测试**和迁移示例全部通过，单测无失败、错误或跳过；
+release 上游对照仍为 **101 个测试体、5,240 次比较，零差异**。
+新增用例覆盖构造重载、回调时机、泛型共享状态、查询集合与序列化、字段赋值及联动、
+Unicode、相对路径和异常输入；生产实现与最低 SDK 要求保持不变。
 
 两个仓库放在同一级目录：
 
