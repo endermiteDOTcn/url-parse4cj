@@ -1,0 +1,265 @@
+{
+  "platform": "Linux AArch64 GNU",
+  "repositories": {
+    "requires-port4cj": "83a84e2d42b1d125fae80338ed6fefcf8ab5f568",
+    "url-parse4cj": "a289b1dcca2cb443ab6f8811a30bc1a06625a857"
+  },
+  "sdkRuns": [
+    {
+      "sdk": "1.0.5",
+      "sdkSha256": "c0dc48b8851fd87853308bf0ef5cce7040f8681ae8a53005d5dac81657745a35",
+      "lastSuccessfulCommandAt": "2026-11-20T07:09:01.517615+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    },
+    {
+      "sdk": "1.1.0",
+      "sdkSha256": "fe961bd2972632fb86cbb8bb2d536a9fcaa8308d348c6a4f9148276ee62f495a",
+      "lastSuccessfulCommandAt": "2026-11-20T07:13:43.504577+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    },
+    {
+      "sdk": "1.1.3",
+      "sdkSha256": "0b0ce42ce2492f654b00029687229188c82751418cb34df7990efd43eaf9c41f",
+      "lastSuccessfulCommandAt": "2026-11-20T07:18:44.964029+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    },
+    {
+      "sdk": "1.1.5",
+      "sdkSha256": "2ee7b0fb38c6b5c38996ae8710d061617bf54d429e0f9817cd57aea71a3e0eb8",
+      "lastSuccessfulCommandAt": "2026-11-20T07:23:37.037122+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    },
+    {
+      "sdk": "1.2.0",
+      "sdkSha256": "40e3962472d6d1b181e685198b193b904a385ac8dbbdff8aa9c52c4bb6f6e0f1",
+      "lastSuccessfulCommandAt": "2026-11-20T07:29:53.072424+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    },
+    {
+      "sdk": "1.2.1",
+      "sdkSha256": "5c0f58166f287d7d1317eca416446bcdfd22d0fe8bfc62c38de3e4bfda8b791d",
+      "lastSuccessfulCommandAt": "2026-11-20T07:33:36.250466+00:00",
+      "successfulCommands": 40,
+      "invalidInputsRejected": 28,
+      "nativeElfArtifacts": 6,
+      "profiles": [
+        "release",
+        "debug"
+      ],
+      "seeds": [
+        0,
+        1,
+        42,
+        24301,
+        20261021,
+        20261114,
+        2147483648,
+        4294967295
+      ],
+      "urlComparisons": 41920,
+      "portComparisons": 95760
+    }
+  ],
+  "environment": {
+    "os": "Ubuntu 24.04.5 LTS",
+    "kernel": "5.10.226-android12-9-00047-g4968e29b7f92-ab12786767",
+    "libc": "glibc 2.39",
+    "node": "v22.22.2",
+    "device": "Redmi Note 11T Pro (xaga), Ubuntu chroot"
+  },
+  "checksPerSdk": {
+    "unitTestsPerProfile": {
+      "url_parse": 26,
+      "requires_port": 9
+    },
+    "skipped": 0,
+    "errors": 0,
+    "failures": 0,
+    "examplesPerProfile": [
+      "examples/migration",
+      "examples/basic"
+    ],
+    "dualConsumerChecksPerProfile": 8,
+    "elfTarget": "ELF64 little-endian AArch64 (e_machine 183)",
+    "upstreamPerSeed": {
+      "profile": "release",
+      "urlUpstreamTestBodies": 101,
+      "urlComparisons": 5240,
+      "portComparisons": 11970
+    },
+    "unsetMatches20261021": true,
+    "00042Matches42": true,
+    "invalidSeedFormsPerRepository": 14
+  },
+  "crossArchitectureCorpora": {
+    "0": {
+      "urlInputSha256": "cc6ae33fbdfdab252d54186a29110eb15c00ac9eac2e35a126b42e6e0549d985",
+      "portSourceSha256": "627cc908f025cdf89c9e0d2fc3502aba83273f3a3190c21384b3da1ffc7fef68"
+    },
+    "1": {
+      "urlInputSha256": "aa4c68e32c8505458c2d260b17ef2388232dabd16148702dac4fe898013339ba",
+      "portSourceSha256": "32a38fe780c519d150992f5a32e329b8388c06abff9772a99ce7d3d8cd072a50"
+    },
+    "42": {
+      "urlInputSha256": "91b03be0890b0d19536caf59716e32568b58351f9f013578ebf75ece619107ba",
+      "portSourceSha256": "a6cb471512fe9bde7a642afbe300b4225bafad1b30183cda90aace0c875a3a11"
+    },
+    "24301": {
+      "urlInputSha256": "027eb22418edcd7043a996c0b005febca7f555db8ee9d6dd78cf6111116c37a0",
+      "portSourceSha256": "57b76d54f4c82e06223dcb11cd958a80b4973502db428f00acc8f6f23061fe45"
+    },
+    "20261021": {
+      "urlInputSha256": "2963dd259a44bdcc84b45c55ad78e1cdd2c1968016aaceb54a3c496845184d95",
+      "portSourceSha256": "2d12730dae074a396327a23482c21081a2e1048539971dbeded7cef734550d6b"
+    },
+    "20261114": {
+      "urlInputSha256": "5c4cbed34ee03e55339aa24edb9a4b09f745bf84710b5bc4f4804a96d88a744c",
+      "portSourceSha256": "5242786a30c35623eedb7c441a3b71744af072a37adf42a5ba500127afb2588c"
+    },
+    "2147483648": {
+      "urlInputSha256": "ac942680041a4d43be2acf58eb5595f6873ea53be315a77f30762fbc068f03f5",
+      "portSourceSha256": "a04c7ba05226f5481624788040750aef4de1e1e456f4e301e02accff9125d6c6"
+    },
+    "4294967295": {
+      "urlInputSha256": "540b4c7e6d36ff66e88db1f1879c665326cba8dd734e930bf853724b2ba1d1c5",
+      "portSourceSha256": "d2d9009f7ff150d9206e777b3d680f92bf8c0beeeca0d9c1c52219d428a0f4bc"
+    }
+  },
+  "explicitSeedTotals": {
+    "sdkSeedPairs": 48,
+    "urlComparisons": 251520,
+    "portComparisons": 574560,
+    "mismatches": 0
+  },
+  "sdk121AdditionalChecks": {
+    "sdk": "1.2.1",
+    "coverage": {
+      "requires-port4cj": {
+        "src/requires_port.cj": {
+          "covered": 68,
+          "executable": 68
+        }
+      },
+      "url-parse4cj": {
+        "src/location.cj": {
+          "covered": 98,
+          "executable": 98
+        },
+        "src/query.cj": {
+          "covered": 120,
+          "executable": 121
+        },
+        "src/strings.cj": {
+          "covered": 134,
+          "executable": 135
+        },
+        "src/url.cj": {
+          "covered": 370,
+          "executable": 384
+        }
+      }
+    },
+    "urlLint": {
+      "mandatory": 0,
+      "suggestions": 43,
+      "total": 43
+    },
+    "packaging": {
+      "portBundleSha256": "6c1243b6856e6359eab0449ae0c72f4a29c60f093ebaa9fa853cf8a7f755e730",
+      "portUnpackedTests": 9,
+      "portUnpackedComparisons": 11970,
+      "urlBundleExitCode": 1,
+      "urlBundleBlocker": "local path dependency requires_port"
+    }
+  }
+}

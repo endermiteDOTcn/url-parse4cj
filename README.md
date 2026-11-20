@@ -35,7 +35,7 @@ url-parse4cj/
 ## 环境与依赖
 
 - 最低仓颉 SDK **1.0.5**，加载 SDK 环境后使用 `cjc`、`cjpm`。
-- 验证平台：Windows x86_64、Linux x86_64（Ubuntu 26.04.1 / WSL2）。
+- 验证平台包括 Windows x86_64、Linux x86_64（WSL2）和 Linux AArch64（xaga 上的 Ubuntu 24.04.5 chroot）。
 - 上游行为对照脚本使用 Node.js。
 
 2026-11-14 使用各 SDK 的独立构建目录及 Node.js 22.20.0，完成以下版本回归：
@@ -67,6 +67,8 @@ Unicode、相对路径和异常输入；生产实现与最低 SDK 要求保持�
 
 八种子扩展回归、SDK 1.2.1 / Windows 的原生单测行覆盖率与本轮入口校验复验，
 见[兼容性验证报告](doc/validation.md)和[机器结果](doc/validation-results.json)。
+
+2026-11-20 在 Linux AArch64 真机上复验了相同的六个 SDK。各版本的 release/debug 构建、26 个 URL 单测、迁移示例和双库消费工程均通过。release 下八个种子累计完成 251,520 次 URL 行为比较，零差异。[ARM64 验收记录](doc/validation.md#linux-aarch64) · [逐版结果](doc/validation-linux-arm64.json)
 
 两个仓库放在同一级目录：
 
