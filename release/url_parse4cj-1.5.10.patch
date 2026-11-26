@@ -1,0 +1,215 @@
+diff --git a/README.md b/README.md
+index 4d43f745cd6c719aaaafd98890a3ea5888f9b190..4107fbc86178fa55d4c6a42376c70c94120b63b0 100644
+--- a/README.md
++++ b/README.md
+@@ -34,7 +34,7 @@ url-parse4cj/
+
+ ## 环境与依赖
+
+-- 最低仓颉 SDK **1.0.5**，加载 SDK 环境后使用 `cjc`、`cjpm`。
++- 中心仓制品要求仓颉 SDK **1.1.0** 或更高版本，加载 SDK 环境后使用 `cjc`、`cjpm`。
+ - 验证平台包括 Windows x86_64、Linux x86_64（WSL2）和 Linux AArch64（xaga 上的 Ubuntu 24.04.5 chroot）。
+ - 上游行为对照脚本使用 Node.js。
+
+@@ -56,7 +56,7 @@ release 模式的上游对照使用脚本原有固定种子 `20261021`，每个
+
+ 验证对应本仓源码基线 `8181a1589158bbe8a8a45e12c5acf6f324deaf93`，
+ `requires-port4cj` 依赖基线为 `5f3cf14a7a4e440e2e5b2009c2059eefb182a067`。
+-清单中的 `cjc-version = "1.0.5"` 继续作为最低 SDK 要求；结论限于表中平台从源码
++该轮使用本地路径依赖，源码最低 SDK 为 1.0.5；结论限于表中平台从源码
+ 重新构建后的兼容性，未验证跨 SDK 二进制混用。
+
+ 2026-11-16 加入 `src/public_api_test.cj` 的 9 个公开 API 回归用例后，在上表 12 个环境
+@@ -70,20 +70,13 @@ Unicode、相对路径和异常输入；生产实现与最低 SDK 要求保持
+
+ 2026-11-20 在 Linux AArch64 真机上复验了相同的六个 SDK。各版本的 release/debug 构建、26 个 URL 单测、迁移示例和双库消费工程均通过。release 下八个种子累计完成 251,520 次 URL 行为比较，零差异。[ARM64 验收记录](doc/validation.md#linux-aarch64) · [逐版结果](doc/validation-linux-arm64.json)
+
+-两个仓库放在同一级目录：
+-
+-```text
+-cj/
+-├── requires-port4cj/
+-└── url-parse4cj/
+-```
+-
+-根目录 `cjpm.toml` 通过 `path = "../requires-port4cj"` 引入端口判断库。
++中心仓制品的 `cjpm.toml` 声明 `requires_port = "1.0.0"`，由 `cjpm` 下载该依赖。
++SDK 1.0.5 用户可用源码仓库的本地路径依赖方式构建。
+
+ ## 编译与验证
+
+-加载待测 SDK 环境后，在根目录执行。切换 SDK 时还需清理兄弟目录 `requires-port4cj`、
+-迁移示例和 `tests/compatibility` 的构建缓存：
++加载待测 SDK 环境后，在根目录执行。切换 SDK 时还需清理迁移示例和
++`tests/compatibility` 的构建缓存：
+
+ ```shell
+ cjpm clean
+@@ -121,11 +114,11 @@ cjpm run -g
+
+ ```toml
+ [dependencies]
+-url_parse = { path = "../url-parse4cj" }
++url_parse4cj = "1.5.10"
+ ```
+
+ ```cangjie
+-import url_parse.*
++import url_parse4cj.*
+
+ main() {
+     let url = parse("../users?id=42", "https://api.example.com/v1/items", parseQuery: true)
+diff --git a/cjpm.toml b/cjpm.toml
+index f42eed03ff3c28fb37f4c73c110116916834a675..e2e9e8453e7cb5e7c2d2bfaa06a008bc130a7d97 100644
+--- a/cjpm.toml
++++ b/cjpm.toml
+@@ -1,10 +1,10 @@
+ [package]
+-cjc-version = "1.0.5"
+-name = "url_parse"
++cjc-version = "1.1.0"
++name = "url_parse4cj"
+ description = "Cangjie URL parsing with url-parse and DefinitelyTyped API compatibility"
+ version = "1.5.10"
+ output-type = "static"
+ target-dir = "target"
+
+ [dependencies]
+-requires_port = { path = "../requires-port4cj" }
++requires_port = "1.0.0"
+diff --git a/doc/migration.md b/doc/migration.md
+index a5636ef9f8678e68fedbc636c95165ae2010264c..c0b4aa44208c27a8edefafd46d6d53e02a73752c 100644
+--- a/doc/migration.md
++++ b/doc/migration.md
+@@ -16,7 +16,7 @@ console.log(url.href);
+ 仓颉：
+
+ ```cangjie
+-import url_parse.*
++import url_parse4cj.*
+
+ main() {
+     let url = parse("../users?id=42", "https://api.example.com/v1/items", parseQuery: true)
+diff --git a/examples/migration/cjpm.toml b/examples/migration/cjpm.toml
+index 4aa1fd81a0144f1851b6de5e00d036a161627aa7..6c3336d754cb25198946bebd46b3ee40dc4967f9 100644
+--- a/examples/migration/cjpm.toml
++++ b/examples/migration/cjpm.toml
+@@ -5,4 +5,4 @@ version = "1.0.0"
+ output-type = "executable"
+
+ [dependencies]
+-url_parse = { path = "../.." }
++url_parse4cj = { path = "../.." }
+diff --git a/examples/migration/src/main.cj b/examples/migration/src/main.cj
+index 91474f4e5d78ba1b0c64a39f950c4bfdf8831315..082d343074523774ccfe9bb5daeda8317e4d8ab5 100644
+--- a/examples/migration/src/main.cj
++++ b/examples/migration/src/main.cj
+@@ -1,6 +1,6 @@
+ package url_parse_migration
+
+-import url_parse.*
++import url_parse4cj.*
+
+ main() {
+     // const url = parse('../users?id=42', 'https://api.example.com/v1/items', true)
+diff --git a/src/location.cj b/src/location.cj
+index 574e109e1987abc05603d0b825da06b95cd53ea3..9718dc13990be2f6cb563d1a1739c2a9d2b1eea5 100644
+--- a/src/location.cj
++++ b/src/location.cj
+@@ -1,6 +1,6 @@
+ // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
+ // Ported to Cangjie in 2026. Licensed under the MIT License.
+-package url_parse
++package url_parse4cj
+
+ import std.collection.*
+
+diff --git a/src/public_api_test.cj b/src/public_api_test.cj
+index a4a1b851c684eac0db1479d11bdb3738335f7fd3..90e15be5174a9491f2ce960bd8bc659e92b798e3 100644
+--- a/src/public_api_test.cj
++++ b/src/public_api_test.cj
+@@ -1,4 +1,4 @@
+-package url_parse
++package url_parse4cj
+
+ import std.collection.*
+ import std.unittest.*
+diff --git a/src/query.cj b/src/query.cj
+index ab0f66441af0556cd728ce64a72f15745f8fe117..63a35878a33126b318ae61415855936b08087b10 100644
+--- a/src/query.cj
++++ b/src/query.cj
+@@ -1,6 +1,6 @@
+ // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
+ // Query conversion derived from querystringify. Licensed under the MIT License.
+-package url_parse
++package url_parse4cj
+
+ import std.collection.*
+ import std.convert.*
+diff --git a/src/strings.cj b/src/strings.cj
+index 342ee9bd8595b02cbf823cac643df1b9c5482be4..51e5f6a45a1386a43f57406e684d2c677e4ac684 100644
+--- a/src/strings.cj
++++ b/src/strings.cj
+@@ -1,6 +1,6 @@
+ // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
+ // Ported to Cangjie in 2026. Licensed under the MIT License.
+-package url_parse
++package url_parse4cj
+
+ import std.collection.*
+
+diff --git a/src/types.cj b/src/types.cj
+index de7f2d46a12bf5a61637e36104fd03c654971994..e6b5a2769613d2e8ddf349de76ff23af6be31766 100644
+--- a/src/types.cj
++++ b/src/types.cj
+@@ -1,4 +1,4 @@
+-package url_parse
++package url_parse4cj
+
+ public type QueryParser<T> = (String) -> T
+
+diff --git a/src/url.cj b/src/url.cj
+index 04149b4b96532de4d47ac1ee25dbef1de88a57e6..704ad352fe93e376bb7d42038b26f2fd4065c83b 100644
+--- a/src/url.cj
++++ b/src/url.cj
+@@ -1,6 +1,6 @@
+ // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
+ // Ported to Cangjie in 2026. Licensed under the MIT License.
+-package url_parse
++package url_parse4cj
+
+ import requires_port.required
+ import std.unicode.*
+diff --git a/src/url_test.cj b/src/url_test.cj
+index 797d417aec6bfbbb237f36e224e7796ca7fcf819..9a34f0ef0c9faff4afb6d88a3de454788750f12c 100644
+--- a/src/url_test.cj
++++ b/src/url_test.cj
+@@ -1,4 +1,4 @@
+-package url_parse
++package url_parse4cj
+
+ import std.unittest.*
+ import std.unittest.testmacro.*
+diff --git a/tests/compatibility/cjpm.toml b/tests/compatibility/cjpm.toml
+index 7f9b11d4cd0318b7ae8c2f7b12985290ea446e06..0083971697792a8ea25ba4611eaa77ff59a195e1 100644
+--- a/tests/compatibility/cjpm.toml
++++ b/tests/compatibility/cjpm.toml
+@@ -5,4 +5,4 @@ version = "1.0.0"
+ output-type = "executable"
+
+ [dependencies]
+-url_parse = { path = "../.." }
++url_parse4cj = { path = "../.." }
+diff --git a/tests/compatibility/src/main.cj b/tests/compatibility/src/main.cj
+index ec480f6a96625901bda8c2fc88e2ec91699077bf..4ca2297f0791245b4f1c1c63baef89f87920f25e 100644
+--- a/tests/compatibility/src/main.cj
++++ b/tests/compatibility/src/main.cj
+@@ -3,7 +3,7 @@ package url_parse_compatibility
+ import std.collection.*
+ import std.convert.*
+ import std.env.*
+-import url_parse.*
++import url_parse4cj.*
+
+ func unhex(text: String): String {
+     if (text == "-") {

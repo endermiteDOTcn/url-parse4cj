@@ -107,6 +107,6 @@ done
 
 2026-11-16 在 `cjpm build` 后，以依赖的真实 cjo 执行独立 `cjlint`，结果为 **0 条 MANDATORY、43 条 SUGGESTIONS**。可复现为 `cjlint -f src --import-path target/release/requires_port -o target/lint -r json`。对空密码字段和解析字符串的误报采用附原因的逐行例外，未修改公共字段、输入或断言，也未关闭整类规则；建议诊断仍需保留。
 
-同日默认 `cjpm bundle` 实测退出 1，当前 `requires_port = { path = "../requires-port4cj" }` 被中心仓依赖格式检查阻塞。需要先确认可用的真实中心仓依赖，再调整声明并重新打包、解包验证和检验干净消费端；独立 lint 结果不代表 URL 包已通过 bundle。本轮未执行中心仓发布。
+同日使用同级路径依赖运行默认 `cjpm bundle`，在中心仓依赖格式检查处退出 1。2026-11-26 发布的制品使用中心仓依赖 `requires_port = "1.0.0"`。默认打包通过，解包后使用 SDK 1.1.0 通过 26 项单测、迁移示例与 5,240 次行为比较，干净项目也通过匿名拉取和运行验证。[制品复现步骤](../README.md#复现中心仓-1510)
 
-上述两轮的 Linux x86_64 结果来自 WSL2。跨 SDK 二进制混用、macOS、OpenHarmony/HarmonyOS 及中心仓服务端验收仍待验证。
+上述两轮的 Linux x86_64 结果来自 WSL2。跨 SDK 二进制混用、macOS 和 OpenHarmony/HarmonyOS 仍待验证。
