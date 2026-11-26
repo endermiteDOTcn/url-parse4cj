@@ -34,7 +34,7 @@ url-parse4cj/
 
 ## 环境与依赖
 
-- 最低仓颉 SDK **1.0.5**，加载 SDK 环境后使用 `cjc`、`cjpm`。
+- 从 Git 源码构建最低需要 SDK **1.0.5**。从中心仓安装需要 SDK **1.1.0** 或更新版本。
 - 验证平台包括 Windows x86_64、Linux x86_64（WSL2）和 Linux AArch64（xaga 上的 Ubuntu 24.04.5 chroot）。
 - 上游行为对照脚本使用 Node.js。
 
@@ -117,7 +117,18 @@ cjpm run -g
 
 ## 使用
 
-在消费端 `cjpm.toml` 中添加：
+### 从中心仓安装
+
+在消费项目的 `cjpm.toml` 中加入依赖，用 `import url_parse4cj.*` 导入。[中心仓制品](https://pkg.cangjie-lang.cn/package/url_parse4cj/1.5.10/readme)
+
+```toml
+[dependencies]
+url_parse4cj = "1.5.10"
+```
+
+### 从 Git 源码使用
+
+将两个仓库放在同一级目录，在消费项目的 `cjpm.toml` 中加入以下路径依赖。源码的导入名为 `url_parse`。
 
 ```toml
 [dependencies]
@@ -143,6 +154,24 @@ main() {
 自定义解析器返回 `URLParse<T>`，其 `query` 为回调返回的类型。
 
 完整示例及调用对应关系见 [JS/TS 迁移说明](doc/migration.md)，签名见 [API 文档](doc/feature_api.md)。
+
+## 复现中心仓 1.5.10
+
+中心仓制品以提交 `8b142b3` 为基线，应用[发布补丁](release/url_parse4cj-1.5.10.patch)后打包。补丁记录模块和根包改名、对应的示例与导入路径，以及中心仓依赖 `requires_port = "1.0.0"`。SDK 1.0.5 的 `cjpm` 无法解析这种依赖声明，因此制品的最低 SDK 为 1.1.0。
+
+加载 SDK 1.2.1，在目录名为 `url-parse4cj` 的 Git 克隆根目录运行以下命令。相邻的目标目录须尚未存在。
+
+```shell
+git worktree add --detach ../url-parse4cj-1.5.10 8b142b39450e7bb990f5cbf7769c8d4f6d6fa70f
+cd ../url-parse4cj-1.5.10
+git apply --check ../url-parse4cj/release/url_parse4cj-1.5.10.patch
+git apply ../url-parse4cj/release/url_parse4cj-1.5.10.patch
+cjpm bundle
+```
+
+2026-11-26 上传的 `url_parse4cj-1.5.10.cjp` 的 SHA-256 为 `9fc4f02037e591357712f27f2731add840d6189d26669026e225cdff31f6ebbc`。[中心仓索引](https://pkg.cangjie-lang.cn/registry/index/ur/l_/url_parse4cj)
+
+复打包以归档内文件路径和内容一致为准。归档条目的时间戳会随构建变化。
 
 ## 开源协议
 
