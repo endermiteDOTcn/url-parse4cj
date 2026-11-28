@@ -1,6 +1,6 @@
 package url_parse_migration
 
-import url_parse.*
+import url_parse4cj.*
 
 main() {
     // const url = parse('../users?id=42', 'https://api.example.com/v1/items', true)

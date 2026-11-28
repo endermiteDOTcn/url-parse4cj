@@ -7,7 +7,7 @@
 | 运行库与测试 | [unshiftio/url-parse](https://github.com/unshiftio/url-parse)，1.5.10，提交 `877225add9c3a2e33ef20ebef94dd397a0965666` |
 | 类型定义与调用样例 | [DefinitelyTyped/types/url-parse](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/url-parse) |
 | 查询转换 | [unshiftio/querystringify](https://github.com/unshiftio/querystringify)，提交 `60d8dd92aeb5550fb79b93e6dae193d02e029daf` |
-| 默认端口判断 | [requires-port4cj](https://gitcode.com/gcw_kMd990Oo/requires-port4cj)，模块 `requires_port` |
+| 默认端口判断 | [requires-port4cj](https://github.com/endermiteDOTcn/requires-port4cj)，中心仓包 `requires_port` 1.0.0 |
 
 源码快照位于 `upstream/`，包含原始许可。`upstream/manifest.json` 记录版本、提交和类型文件摘要。
 

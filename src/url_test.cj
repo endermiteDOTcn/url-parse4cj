@@ -1,4 +1,4 @@
-package url_parse
+package url_parse4cj
 
 import std.unittest.*
 import std.unittest.testmacro.*

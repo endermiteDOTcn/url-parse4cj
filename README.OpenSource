@@ -1,0 +1,46 @@
+[
+  {
+    "Name": "url-parse",
+    "License": "MIT",
+    "License File": "upstream/url-parse/LICENSE",
+    "Version Number": "1.5.10",
+    "Owner": "endermite (endermite@endermite.cn)",
+    "Upstream URL": "https://github.com/unshiftio/url-parse",
+    "Source URL": "https://github.com/unshiftio/url-parse/archive/refs/tags/1.5.10.tar.gz",
+    "Description": "Pure Cangjie port of url-parse 1.5.10 (commit 877225add9c3a2e33ef20ebef94dd397a0965666) providing URL parsing, relative resolution, chained set mutation, query callbacks, and serialization. The snapshot under upstream/url-parse/ is retained strictly for provenance and differential verification.",
+    "Reason": "Listed in Cangjie-TPC/TPC-Resource TPC-LIST.md to facilitate migrating JavaScript/TypeScript projects using url-parse to Cangjie."
+  },
+  {
+    "Name": "querystringify",
+    "License": "MIT",
+    "License File": "upstream/querystringify/LICENSE",
+    "Version Number": "2.2.0",
+    "Owner": "endermite (endermite@endermite.cn)",
+    "Upstream URL": "https://github.com/unshiftio/querystringify",
+    "Source URL": "https://github.com/unshiftio/querystringify/archive/refs/tags/2.2.0.tar.gz",
+    "Description": "Query string parsing and serialization behavior ported in src/query.cj from querystringify 2.2.0 (commit 60d8dd92aeb5550fb79b93e6dae193d02e029daf). The snapshot under upstream/querystringify/ is retained strictly for provenance and differential verification.",
+    "Reason": "Required to match url-parse 1.5.10 built-in query parsing and stringify semantics."
+  },
+  {
+    "Name": "@types/url-parse (DefinitelyTyped)",
+    "License": "MIT",
+    "License File": "upstream/types/LICENSE",
+    "Version Number": "05766ab10a4987e93fdee7627f9fe9e7bc6d1a65",
+    "Owner": "endermite (endermite@endermite.cn)",
+    "Upstream URL": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/url-parse",
+    "Source URL": "https://github.com/DefinitelyTyped/DefinitelyTyped/archive/05766ab10a4987e93fdee7627f9fe9e7bc6d1a65.tar.gz",
+    "Description": "TypeScript type definitions and usage tests referenced for generic URLParse<T> and callback signatures. Snapshot under upstream/types/ is retained for reference only and is not compiled into runtime code.",
+    "Reason": "Provides typed API alignment for TypeScript-to-Cangjie migration."
+  },
+  {
+    "Name": "requires-port (test oracle snapshot only)",
+    "License": "MIT",
+    "License File": "upstream/requires-port/LICENSE",
+    "Version Number": "1.0.0",
+    "Owner": "endermite (endermite@endermite.cn)",
+    "Upstream URL": "https://github.com/unshiftio/requires-port",
+    "Source URL": "https://github.com/unshiftio/requires-port/archive/07e8e8298f892243734d695e884a78a56e3dccb9.tar.gz",
+    "Description": "Offline JavaScript oracle copy under upstream/requires-port/ used solely by scripts/check_upstream.cjs to execute upstream url-parse tests in Node.js. Runtime port checking is NOT nested; it is imported via cjpm central-repository dependency requires_port = \"1.0.0\".",
+    "Reason": "Enables self-contained offline differential testing against upstream url-parse without nesting runtime dependency source code."
+  }
+]

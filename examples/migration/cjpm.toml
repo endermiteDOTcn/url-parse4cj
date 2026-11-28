@@ -1,8 +1,8 @@
 [package]
-cjc-version = "1.0.5"
+cjc-version = "1.1.0"
 name = "url_parse_migration"
 version = "1.0.0"
 output-type = "executable"
 
 [dependencies]
-url_parse = { path = "../.." }
+url_parse4cj = { path = "../.." }

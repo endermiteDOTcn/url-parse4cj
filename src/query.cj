@@ -1,6 +1,6 @@
 // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
 // Query conversion derived from querystringify. Licensed under the MIT License.
-package url_parse
+package url_parse4cj
 
 import std.collection.*
 import std.convert.*

@@ -1,10 +1,15 @@
 [package]
-cjc-version = "1.0.5"
-name = "url_parse"
+cjc-version = "1.1.0"
+name = "url_parse4cj"
 description = "Cangjie URL parsing with url-parse and DefinitelyTyped API compatibility"
 version = "1.5.10"
 output-type = "static"
 target-dir = "target"
+repository = "https://github.com/endermiteDOTcn/url-parse4cj"
+homepage = "https://github.com/endermiteDOTcn/url-parse4cj"
+documentation = "https://github.com/endermiteDOTcn/url-parse4cj/blob/main/doc/feature_api.md"
+tag = ["url", "url-parse", "uri", "querystring"]
+license = ["MIT"]
 
 [dependencies]
-requires_port = { path = "../requires-port4cj" }
+requires_port = "1.0.0"

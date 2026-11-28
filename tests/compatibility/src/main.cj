@@ -3,7 +3,7 @@ package url_parse_compatibility
 import std.collection.*
 import std.convert.*
 import std.env.*
-import url_parse.*
+import url_parse4cj.*
 
 func unhex(text: String): String {
     if (text == "-") {

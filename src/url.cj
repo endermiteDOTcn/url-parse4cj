@@ -1,6 +1,6 @@
 // Copyright (c) 2015 Unshift.io, Arnout Kazemier, the Contributors.
 // Ported to Cangjie in 2026. Licensed under the MIT License.
-package url_parse
+package url_parse4cj
 
 import requires_port.required
 import std.unicode.*

@@ -16,7 +16,7 @@ console.log(url.href);
 仓颉：
 
 ```cangjie
-import url_parse.*
+import url_parse4cj.*
 
 main() {
     let url = parse("../users?id=42", "https://api.example.com/v1/items", parseQuery: true)
